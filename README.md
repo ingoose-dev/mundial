@@ -3,6 +3,7 @@
 clonar repositorio
 ```bash
 git clone https://github.com/ingoose-dev/mundial.git
+cd mundial
 ```
 instalar express
 ```bash
