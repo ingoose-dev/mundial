@@ -9,12 +9,6 @@ instalar express
 ```bash
 npm install express
 ```
-
-instalar express
-```bash
-npm install express
-```
-
 levantar servidor:
 
 ```bash
