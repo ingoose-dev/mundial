@@ -32,7 +32,7 @@ app.get('/api/selecciones', (req, res) => {
 
     //api/selecciones?continente=xxx&campeon=true
     if (continente && campeon === 'true') {
-        const seleccionesFiltradas = selecciones.filter(s => s.continenteId === continente && s.copas.length > 0)
+        const seleccionesFiltradas = selecciones.filter(s => s.continenteId === validaContinente(continente) && s.copas.length > 0)
         res.status(200).json(seleccionesFiltradas)
     }
 
@@ -57,7 +57,7 @@ app.get('/api/selecciones', (req, res) => {
 })
 
 app.get('/api/selecciones/:id', (req, res) => {
-    const id = parseInt(req.params.id)
+    const id = validaSeleccion(req.params.id)
     const seleccion = selecciones.find(s => s.id === id)
     if (seleccion) {
         res.json(seleccion)
@@ -76,7 +76,7 @@ app.get('/api/copas', (req, res) => {
 app.get('/api/copas/:seleccion', (req, res) => {
     const seleccion = req.params.seleccion ? validaSeleccion(req.params.seleccion) : null
     if (seleccion) {
-        const copas = selecciones.find(s => s.id === seleccion)?.copas
+        const copas = selecciones.find(s => s.id === validaSeleccion(seleccion))?.copas
         if (copas.length > 0) {
             res.status(200).json(copas)
         } else {
@@ -113,6 +113,10 @@ app.post('/api/worldcup/2026/semifinals/:n', (req, res) => {
         return
     }
 
+
+    local.seleccionId = validaSeleccion(local.seleccionId)
+    visita.seleccionId = validaSeleccion(visita.seleccionId)
+    
     //valida que los goles sean números
     if (isNaN(local.goles) || isNaN(visita.goles)) {
         res.status(400).json({ error: 'Los goles deben ser números' })
