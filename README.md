@@ -14,4 +14,9 @@ levantar servidor:
 ```bash
 npm run dev
 ```
+Link video
+```bash
+https://youtu.be/Qz92rklPhuA
+```
+
 
