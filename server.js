@@ -1,13 +1,7 @@
 import { continentes, grupos, selecciones, partidos } from './datos-mundial.js'
 import express from 'express'
-import cors from 'cors'
 const app = express()
 app.use(express.json())
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT'],
-    alowHeaders: ['Content-Type']
-}))
 const PORT = 3000
 
 //------ Rutas de la API -------------------------------------------------------------
@@ -137,7 +131,7 @@ app.post('/api/worldcup/2026/semifinals/:n', (req, res) => {
         return
     }
 
-   //valida que los datos enviados existan y que no sean nulos
+    //valida que los datos enviados existan y que no sean nulos
     if (!local || !visita || !local.seleccionId || !visita.seleccionId || local.goles === undefined || visita.goles === undefined) {
         res.status(400).json({ error: 'Faltan datos del partido' })
         return
@@ -200,6 +194,36 @@ app.get('/api/worldcup/2026/semifinals', (req, res) => {
 
 app.post('/api/worldcup/2026/final', (req, res) => {
     const { local, visita } = req.body
+    //valida que los datos de local y visita sean correctos
+    if (!validaSeleccion(local.seleccionId) || !validaSeleccion(visita.seleccionId)) {
+        res.status(400).json({ error: 'Selección local o visita no válida' })
+        return
+    }
+
+    //valida que los goles sean números
+    if (isNaN(local.goles) || isNaN(visita.goles)) {
+        res.status(400).json({ error: 'Los goles deben ser números' })
+        return
+    }
+
+    //valida que los goles no sean negativos
+    if (local.goles < 0 || visita.goles < 0) {
+        res.status(400).json({ error: 'Los goles no pueden ser negativos' })
+        return
+    }
+
+    //valida que no se repitan las selecciones en la final
+    if (local.seleccionId === visita.seleccionId) {
+        res.status(400).json({ error: 'La selección local y visita no pueden ser la misma' })
+        return
+    }
+
+    //valida que los datos enviados existan y que no sean nulos
+    if (!local || !visita || !local.seleccionId || !visita.seleccionId || local.goles === undefined || visita.goles === undefined) {
+        res.status(400).json({ error: 'Faltan datos del partido' })
+        return
+    }
+
     partidos.final = { local, visita }
 
     //ganador de la final (**DESAFIO**)
@@ -244,6 +268,71 @@ app.get('/api/estadisticas', (req, res) => {
         campeones,
         seleccionesPorContinente,
         rankingPromedio
+    })
+})
+
+app.get('/api/grupos/:nombre/tabla', (req, res) => {
+    const nombreGrupo = req.params.nombre
+    const grupo = grupos.find(g => g.nombre.toUpperCase() === nombreGrupo.toUpperCase())
+    if (!grupo) {
+        res.status(404).json({ error: 'Grupo no encontrado' })
+        return
+    }
+
+    //selecciones ordenadas por su ranking FIFA y luego por nombre
+    const seleccionesGrupo = selecciones.filter(s => s.grupoId === grupo.id)
+    const tabla = seleccionesGrupo.sort((a, b) => {
+        if (a.fifaRanking === b.fifaRanking) {
+            return a.nombre.localeCompare(b.nombre)
+        }
+        return a.fifaRanking - b.fifaRanking
+    }).map(s => {
+        return {
+            nombre: s.nombre,
+            fifaRanking: s.fifaRanking
+        }
+    })
+    res.status(200).json(tabla)
+})
+
+app.get('/api/worldcup/2026/camino/:seleccionId', (req, res) => {
+    const seleccionId = parseInt(req.params.seleccionId)
+    const seleccion = selecciones.find(s => s.id === seleccionId)
+    if (!seleccion) {
+        res.status(404).json({ error: 'Selección no encontrada' })
+        return
+    }
+    //partidos de semifinales y final
+    const semifinales = partidos.semifinales.filter(s => s.local.seleccionId === seleccionId || s.visita.seleccionId === seleccionId)
+
+    //valida si la selecion jugo semifinales
+    if (semifinales.length === 0) {
+        res.status(404).json({ error: 'La selección no jugó las semifinales' })
+        return
+    }
+
+
+    const final = partidos.final && (partidos.final.local.seleccionId === seleccionId || partidos.final.visita.seleccionId === seleccionId) ? partidos.final : null
+
+    res.status(200).json({
+        seleccion: seleccion.nombre,
+        semifinales: semifinales.map(s => {
+            return {
+                partido: s.numero,
+                local: selecciones.find(sel => sel.id === s.local.seleccionId).nombre,
+                golesLocal: s.local.goles,
+                visita: selecciones.find(sel => sel.id === s.visita.seleccionId).nombre,
+                golesVisita: s.visita.goles,
+                ganador: (s.local.goles > s.visita.goles) ? selecciones.find(sel => sel.id === s.local.seleccionId).nombre : selecciones.find(sel => sel.id === s.visita.seleccionId).nombre
+            }
+        }),
+        final: final ? {
+            local: selecciones.find(sel => sel.id === final.local.seleccionId).nombre,
+            golesLocal: final.local.goles,
+            visita: selecciones.find(sel => sel.id === final.visita.seleccionId).nombre,
+            golesVisita: final.visita.goles,
+            ganador: (final.local.goles > final.visita.goles) ? selecciones.find(sel => sel.id === final.local.seleccionId).nombre : selecciones.find(sel => sel.id === final.visita.seleccionId).nombre
+        } : null
     })
 })
 

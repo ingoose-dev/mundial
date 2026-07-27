@@ -1,0 +1,281 @@
+{
+  "info": {
+    "_postman_id": "a5a7bc46-40bc-4f01-a911-9b69d677e5e6",
+    "name": "Mundial",
+    "description": "Colección de endpoint definidas para uso de API mundial para el curso de FULL STACK del IPSS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "10868720"
+  },
+  "item": [
+    {
+      "name": "Listar selecciones",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/selecciones",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "selecciones"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar solo una selección",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/selecciones/{idSeleccion o nombre}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "selecciones",
+            "{idSeleccion o nombre}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar copas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/copas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "copas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar copas de una selección",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/copas/{idSeleccion o nombre}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "copas",
+            "{idSeleccion o nombre}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Semifinales",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/worldcup/2026/semifinals/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "worldcup",
+            "2026",
+            "semifinals",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar una Semifinal",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/worldcup/2026/semifinals/{idPartido}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "worldcup",
+            "2026",
+            "semifinals",
+            "{idPartido}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear semifinal",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"local\":\n    {\n        \"seleccionId\":idSeleccion,\n        \"goles\": goles\n    },\n    \"visita\":\n    {\n        \"seleccionId\":idSeleccion,\n        \"goles\": goles\n    }\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/worldcup/2026/semifinals/{idPartido}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "worldcup",
+            "2026",
+            "semifinals",
+            "{idPartido}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar final",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/worldcup/2026/final",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "worldcup",
+            "2026",
+            "final"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear final",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"local\":\n    {\n        \"seleccionId\":idseleccion,\n        \"goles\": goles\n    },\n    \"visita\":\n    {\n        \"seleccionId\":idseleccion,\n        \"goles\": goles\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/worldcup/2026/final",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "worldcup",
+            "2026",
+            "final"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "estadisticas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/estadisticas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "estadisticas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Tabla posiciones por grupo",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "camino",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/worldcup/2026/camino/{idSeleccion}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "worldcup",
+            "2026",
+            "camino",
+            "{idSeleccion}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
