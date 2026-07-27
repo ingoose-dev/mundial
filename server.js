@@ -1,8 +1,16 @@
 import { continentes, grupos, selecciones, partidos } from './datos-mundial.js'
 import express from 'express'
+import cors from 'cors'
 const app = express()
 app.use(express.json())
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT'],
+    allowedHeaders: ['Content-Type'],
+}))
 const PORT = 3000
+
+
 
 //------ Rutas de la API -------------------------------------------------------------
 
@@ -116,7 +124,7 @@ app.post('/api/worldcup/2026/semifinals/:n', (req, res) => {
 
     local.seleccionId = validaSeleccion(local.seleccionId)
     visita.seleccionId = validaSeleccion(visita.seleccionId)
-    
+
     //valida que los goles sean números
     if (isNaN(local.goles) || isNaN(visita.goles)) {
         res.status(400).json({ error: 'Los goles deben ser números' })
@@ -203,6 +211,9 @@ app.post('/api/worldcup/2026/final', (req, res) => {
         res.status(400).json({ error: 'Selección local o visita no válida' })
         return
     }
+
+    local.seleccionId = validaSeleccion(local.seleccionId)
+    visita.seleccionId = validaSeleccion(visita.seleccionId)
 
     //valida que los goles sean números
     if (isNaN(local.goles) || isNaN(visita.goles)) {
